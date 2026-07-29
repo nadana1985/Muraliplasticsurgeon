@@ -1,0 +1,790 @@
+{
+  "$schema": "./graph-schema.json",
+  "project": "<PROJECT_NAME>-improvement",
+  "version": "1.0.0",
+  "target": "<TARGET_DOMAIN>",
+  
+  "config": {
+    "execution": "hybrid",
+    "validation": {
+      "typescript": true,
+      "tests": true,
+      "visual": true
+    },
+    "parallelism": {
+      "foundation": "sequential",
+      "components": "parallel",
+      "sections": "parallel",
+      "integration": "sequential"
+    }
+  },
+
+  "globals": {
+    "designSystem": {
+      "primaryColor": "<PRIMARY_THEME_COLOR_HEX>",
+      "fontFamily": {
+        "display": "<DISPLAY_FONT_FAMILY>",
+        "body": "<BODY_FONT_FAMILY>"
+      },
+      "borderRadius": "0.5rem",
+      "spacingUnit": "8px"
+    },
+    "paths": {
+      "components": "src/components",
+      "styles": "src/styles",
+      "lib": "src/lib",
+      "hooks": "src/hooks",
+      "types": "src/types",
+      "tests": "__tests__",
+      "public": "public"
+    }
+  },
+
+  "nodes": [
+    {
+      "id": "1.1",
+      "name": "design-tokens",
+      "title": "Design Tokens",
+      "description": "Create centralized design tokens file with colors, typography, spacing, shadows, and breakpoints",
+      "wave": 1,
+      "parallel": false,
+      "file": "src/styles/design-tokens.ts",
+      "type": "foundation",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Exports color palette with all shades (50-900)",
+        "Exports typography scale with responsive sizing rules",
+        "Exports spacing scale",
+        "Exports shadow system and border radius tokens",
+        "No TypeScript errors"
+      ]
+    },
+    {
+      "id": "1.2",
+      "name": "types",
+      "title": "Shared Types",
+      "description": "Create shared TypeScript interfaces for components and data models",
+      "wave": 1,
+      "parallel": false,
+      "file": "src/types/index.ts",
+      "type": "foundation",
+      "estimate": "10 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Exports core component prop interfaces",
+        "Exports domain data model interfaces",
+        "No TypeScript errors"
+      ]
+    },
+    {
+      "id": "1.3",
+      "name": "utils",
+      "title": "Utility Functions",
+      "description": "Create shared utility functions (classNames, formatters, validators)",
+      "wave": 1,
+      "parallel": false,
+      "file": "src/lib/utils.ts",
+      "type": "foundation",
+      "estimate": "10 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Exports cn() function for className merging",
+        "Exports common formatting utilities",
+        "No TypeScript errors"
+      ]
+    },
+    {
+      "id": "2.1",
+      "name": "button",
+      "title": "Button Component",
+      "description": "Create reusable Button component with variants, sizes, loading state, and icons",
+      "wave": 2,
+      "parallel": true,
+      "dependsOn": ["1.1", "1.2", "1.3"],
+      "file": "src/components/ui/Button.tsx",
+      "type": "component",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Renders with primary, secondary, ghost, and danger variants",
+        "Renders with different size options (sm, md, lg)",
+        "Shows loading spinner when loading",
+        "Handles disabled state and supports left/right icons",
+        "Passes basic accessibility guidelines"
+      ],
+      "testFile": "src/components/ui/__tests__/Button.test.tsx"
+    },
+    {
+      "id": "2.2",
+      "name": "input",
+      "title": "Input Component",
+      "description": "Create reusable Input component with label, error state, and helper text",
+      "wave": 2,
+      "parallel": true,
+      "dependsOn": ["1.1", "1.2", "1.3"],
+      "file": "src/components/ui/Input.tsx",
+      "type": "component",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Renders input label associated with field ID",
+        "Displays validation errors and helper texts",
+        "Passes accessibility guidelines"
+      ],
+      "testFile": "src/components/ui/__tests__/Input.test.tsx"
+    },
+    {
+      "id": "2.3",
+      "name": "card",
+      "title": "Card Component",
+      "description": "Create reusable Card component with padding options and hover effects",
+      "wave": 2,
+      "parallel": true,
+      "dependsOn": ["1.1", "1.2", "1.3"],
+      "file": "src/components/ui/Card.tsx",
+      "type": "component",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Renders with various padding configurations",
+        "Applies hover interactive animations",
+        "Supports dark mode classes"
+      ],
+      "testFile": "src/components/ui/__tests__/Card.test.tsx"
+    },
+    {
+      "id": "2.4",
+      "name": "section-header",
+      "title": "Section Header Component",
+      "description": "Create SectionHeader component for consistent section headings",
+      "wave": 2,
+      "parallel": true,
+      "dependsOn": ["1.1", "1.2"],
+      "file": "src/components/ui/SectionHeader.tsx",
+      "type": "component",
+      "estimate": "10 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Renders title and optional subtitle",
+        "Supports alignment variants (left, center)"
+      ],
+      "testFile": "src/components/ui/__tests__/SectionHeader.test.tsx"
+    },
+    {
+      "id": "2.5",
+      "name": "icon-button",
+      "title": "Icon Button Component",
+      "description": "Create IconButton component for icon-only actions (search, theme toggle, etc.)",
+      "wave": 2,
+      "parallel": true,
+      "dependsOn": ["1.1", "1.2"],
+      "file": "src/components/ui/IconButton.tsx",
+      "type": "component",
+      "estimate": "10 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": false
+      },
+      "acceptance": [
+        "Renders inside an accessible button tag with an aria-label",
+        "Handles click events seamlessly"
+      ],
+      "testFile": "src/components/ui/__tests__/IconButton.test.tsx"
+    },
+    {
+      "id": "3.1",
+      "name": "theme-provider",
+      "title": "Theme Provider",
+      "description": "Create ThemeProvider context with light/dark/system support",
+      "wave": 3,
+      "parallel": false,
+      "dependsOn": ["1.1"],
+      "file": "src/contexts/ThemeContext.tsx",
+      "type": "layout",
+      "estimate": "25 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": false
+      },
+      "acceptance": [
+        "Provides theme context to descendant nodes",
+        "Supports light, dark, and system modes",
+        "Persists setting to localStorage",
+        "Respects prefers-color-scheme setting"
+      ],
+      "testFile": "src/contexts/__tests__/ThemeContext.test.tsx"
+    },
+    {
+      "id": "3.2",
+      "name": "theme-toggle",
+      "title": "Theme Toggle Button",
+      "description": "Create animated theme toggle button with sun/moon icons",
+      "wave": 3,
+      "parallel": true,
+      "dependsOn": ["2.5", "3.1"],
+      "file": "src/components/theme/ThemeToggle.tsx",
+      "type": "component",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Toggles application theme on click",
+        "Renders appropriate visual indicators (sun/moon)"
+      ],
+      "testFile": "src/components/theme/__tests__/ThemeToggle.test.tsx"
+    },
+    {
+      "id": "3.3",
+      "name": "search-modal",
+      "title": "Search Modal (Cmd+K)",
+      "description": "Create search modal with keyboard shortcut support",
+      "wave": 3,
+      "parallel": true,
+      "dependsOn": ["2.1", "2.2", "3.1"],
+      "file": "src/components/search/SearchModal.tsx",
+      "type": "component",
+      "estimate": "30 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Opens on Cmd+K or Ctrl+K shortcut",
+        "Closes on Escape or backdrop click",
+        "Includes accessible keyboard focus management"
+      ],
+      "testFile": "src/components/search/__tests__/SearchModal.test.tsx"
+    },
+    {
+      "id": "3.4",
+      "name": "navigation",
+      "title": "Navigation Component",
+      "description": "Redesign navigation with mega menu, search trigger, and mobile hamburger",
+      "wave": 3,
+      "parallel": true,
+      "dependsOn": ["2.1", "2.4", "2.5", "3.2"],
+      "file": "src/components/layout/Navigation.tsx",
+      "type": "layout",
+      "estimate": "40 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Sticky navigation bar with branding logo",
+        "Desktop navigation layout with mega menu dropdowns",
+        "Mobile navigation hamburger menu toggle"
+      ],
+      "testFile": "src/components/layout/__tests__/Navigation.test.tsx"
+    },
+    {
+      "id": "3.5",
+      "name": "footer",
+      "title": "Footer Component",
+      "description": "Redesign footer with company info, links, and social media",
+      "wave": 3,
+      "parallel": true,
+      "dependsOn": ["2.1", "2.4", "3.1"],
+      "file": "src/components/layout/Footer.tsx",
+      "type": "layout",
+      "estimate": "25 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": true
+      },
+      "acceptance": [
+        "Includes branding, quick links, category links, and social icons",
+        "Displays copyright notice and essential legal links (Privacy, Terms)"
+      ],
+      "testFile": "src/components/layout/__tests__/Footer.test.tsx"
+    },
+    {
+      "id": "4.1",
+      "name": "hero-section",
+      "title": "Hero Section",
+      "description": "Create modern hero section with gradient, headline, and CTAs",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["2.1", "2.4", "3.1", "3.4"],
+      "file": "src/components/sections/Hero.tsx",
+      "type": "section",
+      "estimate": "30 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Renders high-impact headline and descriptive copy",
+        "Includes primary and secondary call-to-action buttons",
+        "Responsive layout optimized for mobile, tablet, and desktop"
+      ]
+    },
+    {
+      "id": "4.2",
+      "name": "trust-bar",
+      "title": "Partner/Client Trust Bar",
+      "description": "Create trust bar showing client/partner logos with grayscale hover effect",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["2.4", "3.1"],
+      "file": "src/components/sections/TrustBar.tsx",
+      "type": "section",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Shows grid/carousel of partner or client brand logos",
+        "Applies interactive transition effects (e.g. grayscale to full color)"
+      ]
+    },
+    {
+      "id": "4.3",
+      "name": "value-props",
+      "title": "Value Propositions Section",
+      "description": "Create value proposition cards showing key features or benefits",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["2.3", "2.4", "3.1"],
+      "file": "src/components/sections/ValueProps.tsx",
+      "type": "section",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Displays grid of feature/value proposition cards",
+        "Each card has a visual icon, title, and detail description"
+      ]
+    },
+    {
+      "id": "4.4",
+      "name": "features-showcase",
+      "title": "Features or Products Showcase",
+      "description": "Create main content showcase grid with interactive item cards",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["2.3", "2.4", "3.1"],
+      "file": "src/components/sections/FeaturesShowcase.tsx",
+      "type": "section",
+      "estimate": "25 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Displays core listings/features with images, descriptions, and action triggers",
+        "Uses optimized media/images and responsive grid layout"
+      ]
+    },
+    {
+      "id": "4.5",
+      "name": "testimonials",
+      "title": "Testimonials Section",
+      "description": "Create testimonials layout with client/customer feedback quotes",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["2.3", "2.4", "3.1"],
+      "file": "src/components/sections/Testimonials.tsx",
+      "type": "section",
+      "estimate": "25 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Displays customer feedback cards (quote, author profile details)",
+        "Includes star-rating or social verification indicators"
+      ]
+    },
+    {
+      "id": "4.6",
+      "name": "stats-counter",
+      "title": "Statistics Counter Section",
+      "description": "Create animated statistics counters",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["3.1"],
+      "file": "src/components/sections/StatsCounter.tsx",
+      "type": "section",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Renders key stat points that increment when scrolled into view"
+      ]
+    },
+    {
+      "id": "4.7",
+      "name": "cta-section",
+      "title": "Call-to-Action Section",
+      "description": "Create conversion-oriented CTA section with lead capture form or main action buttons",
+      "wave": 4,
+      "parallel": true,
+      "dependsOn": ["2.1", "2.4", "3.1"],
+      "file": "src/components/sections/CTASection.tsx",
+      "type": "section",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "High-visibility layout prompting for user action (e.g. newsletter sign-up, demo booking)"
+      ]
+    },
+    {
+      "id": "5.1",
+      "name": "homepage-composition",
+      "title": "Homepage Composition",
+      "description": "Compose all sections into the homepage layout",
+      "wave": 5,
+      "parallel": false,
+      "dependsOn": ["3.4", "3.5", "4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"],
+      "file": "src/app/page.tsx",
+      "type": "integration",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Assembles all landing page components in correct semantic hierarchy",
+        "Passes full-page layout validation"
+      ]
+    },
+    {
+      "id": "5.2",
+      "name": "layout-update",
+      "title": "Root Layout Update",
+      "description": "Update root layout with ThemeProvider, fonts, and base metadata",
+      "wave": 5,
+      "parallel": false,
+      "dependsOn": ["3.1"],
+      "file": "src/app/layout.tsx",
+      "type": "integration",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Wraps application root in necessary context providers",
+        "Includes standard head configurations and search engine meta details"
+      ]
+    },
+    {
+      "id": "5.3",
+      "name": "global-styles",
+      "title": "Global Styles Update",
+      "description": "Update global stylesheets with brand configuration rules",
+      "wave": 5,
+      "parallel": false,
+      "dependsOn": ["1.1"],
+      "file": "src/app/globals.css",
+      "type": "integration",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": false,
+        "test": false,
+        "visual": true
+      },
+      "acceptance": [
+        "Defines root variables matching design token colors/scales",
+        "Applies global resetting and dark mode rules"
+      ]
+    },
+    {
+      "id": "6.1",
+      "name": "scroll-animations",
+      "title": "Scroll Animations Hook",
+      "description": "Create scroll animation hooks or components for scroll intersections",
+      "wave": 6,
+      "parallel": true,
+      "dependsOn": ["5.1"],
+      "file": "src/hooks/useScrollAnimation.ts",
+      "type": "enhancement",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": false
+      },
+      "acceptance": [
+        "Triggers state change when elements are visible in viewport",
+        "Integrates properly with animation libraries or CSS classes"
+      ],
+      "testFile": "src/hooks/__tests__/useScrollAnimation.test.ts"
+    },
+    {
+      "id": "6.2",
+      "name": "counter-hook",
+      "title": "Animated Counter Hook",
+      "description": "Create animated counter hook for incrementing stats",
+      "wave": 6,
+      "parallel": true,
+      "dependsOn": ["5.1"],
+      "file": "src/hooks/useAnimatedCounter.ts",
+      "type": "enhancement",
+      "estimate": "10 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": false
+      },
+      "acceptance": [
+        "Increments counter smoothly over target duration"
+      ],
+      "testFile": "src/hooks/__tests__/useAnimatedCounter.test.ts"
+    },
+    {
+      "id": "6.3",
+      "name": "motion-components",
+      "title": "Animation Wrappers",
+      "description": "Create reusable animations wrapper components",
+      "wave": 6,
+      "parallel": true,
+      "dependsOn": ["5.1"],
+      "file": "src/components/motion/index.tsx",
+      "type": "enhancement",
+      "estimate": "20 min",
+      "validation": {
+        "typescript": true,
+        "test": true,
+        "visual": false
+      },
+      "acceptance": [
+        "Provides transition styles (fade-in, slide-up, scale-in)",
+        "Handles staggered animations for list grids"
+      ],
+      "testFile": "src/components/motion/__tests__/index.test.tsx"
+    },
+    {
+      "id": "7.1",
+      "name": "jsonld-schema",
+      "title": "JSON-LD Structured Data",
+      "description": "Create schema data structures for search discovery",
+      "wave": 7,
+      "parallel": true,
+      "dependsOn": ["5.2"],
+      "file": "src/components/seo/JsonLd.tsx",
+      "type": "seo",
+      "estimate": "15 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Injects JSON-LD script blocks representing website profiles"
+      ]
+    },
+    {
+      "id": "7.2",
+      "name": "sitemap",
+      "title": "Sitemap Generator",
+      "description": "Create automatic sitemap routing configurations",
+      "wave": 7,
+      "parallel": true,
+      "dependsOn": ["5.2"],
+      "file": "src/app/sitemap.ts",
+      "type": "seo",
+      "estimate": "10 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Generates sitemap indexing all active routing paths"
+      ]
+    },
+    {
+      "id": "7.3",
+      "name": "robots-txt",
+      "title": "Robots.txt Generator",
+      "description": "Create robots directives for crawler permission structures",
+      "wave": 7,
+      "parallel": true,
+      "dependsOn": ["5.2"],
+      "file": "src/app/robots.ts",
+      "type": "seo",
+      "estimate": "5 min",
+      "validation": {
+        "typescript": true,
+        "test": false,
+        "visual": false
+      },
+      "acceptance": [
+        "Renders valid robots crawler text mapping site paths"
+      ]
+    }
+  ],
+
+  "edges": [
+    {"from": "1.1", "to": "2.1"},
+    {"from": "1.1", "to": "2.2"},
+    {"from": "1.1", "to": "2.3"},
+    {"from": "1.1", "to": "2.4"},
+    {"from": "1.1", "to": "2.5"},
+    {"from": "1.1", "to": "3.1"},
+    {"from": "1.1", "to": "5.3"},
+    {"from": "1.2", "to": "2.1"},
+    {"from": "1.2", "to": "2.2"},
+    {"from": "1.2", "to": "2.3"},
+    {"from": "1.2", "to": "2.4"},
+    {"from": "1.2", "to": "2.5"},
+    {"from": "1.3", "to": "2.1"},
+    {"from": "1.3", "to": "2.2"},
+    {"from": "1.3", "to": "2.3"},
+    {"from": "2.1", "to": "3.3"},
+    {"from": "2.1", "to": "3.4"},
+    {"from": "2.1", "to": "4.1"},
+    {"from": "2.1", "to": "4.7"},
+    {"from": "2.2", "to": "3.3"},
+    {"from": "2.3", "to": "4.3"},
+    {"from": "2.3", "to": "4.4"},
+    {"from": "2.3", "to": "4.5"},
+    {"from": "2.4", "to": "3.4"},
+    {"from": "2.4", "to": "3.5"},
+    {"from": "2.4", "to": "4.1"},
+    {"from": "2.4", "to": "4.2"},
+    {"from": "2.4", "to": "4.3"},
+    {"from": "2.4", "to": "4.4"},
+    {"from": "2.4", "to": "4.5"},
+    {"from": "2.4", "to": "4.7"},
+    {"from": "2.5", "to": "3.2"},
+    {"from": "3.1", "to": "3.2"},
+    {"from": "3.1", "to": "3.3"},
+    {"from": "3.1", "to": "3.4"},
+    {"from": "3.1", "to": "3.5"},
+    {"from": "3.1", "to": "4.1"},
+    {"from": "3.1", "to": "4.2"},
+    {"from": "3.1", "to": "4.3"},
+    {"from": "3.1", "to": "4.4"},
+    {"from": "3.1", "to": "4.5"},
+    {"from": "3.1", "to": "4.6"},
+    {"from": "3.1", "to": "4.7"},
+    {"from": "3.1", "to": "5.2"},
+    {"from": "3.1", "to": "5.3"},
+    {"from": "3.2", "to": "3.4"},
+    {"from": "3.4", "to": "5.1"},
+    {"from": "3.5", "to": "5.1"},
+    {"from": "4.1", "to": "5.1"},
+    {"from": "4.2", "to": "5.1"},
+    {"from": "4.3", "to": "5.1"},
+    {"from": "4.4", "to": "5.1"},
+    {"from": "4.5", "to": "5.1"},
+    {"from": "4.6", "to": "5.1"},
+    {"from": "4.7", "to": "5.1"},
+    {"from": "5.1", "to": "6.1"},
+    {"from": "5.1", "to": "6.2"},
+    {"from": "5.1", "to": "6.3"},
+    {"from": "5.2", "to": "7.1"},
+    {"from": "5.2", "to": "7.2"},
+    {"from": "5.2", "to": "7.3"}
+  ],
+
+  "waves": {
+    "1": {
+      "name": "Foundation",
+      "execution": "sequential",
+      "nodes": ["1.1", "1.2", "1.3"],
+      "description": "Design tokens, global types, and helper utility systems"
+    },
+    "2": {
+      "name": "Base Components",
+      "execution": "parallel",
+      "nodes": ["2.1", "2.2", "2.3", "2.4", "2.5"],
+      "description": "Atomic UI component library"
+    },
+    "3": {
+      "name": "Layout & Theme",
+      "execution": "parallel",
+      "nodes": ["3.1", "3.2", "3.3", "3.4", "3.5"],
+      "description": "General page wrappers, nav, footer, search, and themes"
+    },
+    "4": {
+      "name": "Page Sections",
+      "execution": "parallel",
+      "nodes": ["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"],
+      "description": "Modular segments of the landing/home page"
+    },
+    "5": {
+      "name": "Integration",
+      "execution": "sequential",
+      "nodes": ["5.1", "5.2", "5.3"],
+      "description": "Assemble components, integrate root layouts, and format styles"
+    },
+    "6": {
+      "name": "Animations",
+      "execution": "parallel",
+      "nodes": ["6.1", "6.2", "6.3"],
+      "description": "Interaction triggers, numerical counters, and animations"
+    },
+    "7": {
+      "name": "SEO",
+      "execution": "parallel",
+      "nodes": ["7.1", "7.2", "7.3"],
+      "description": "Metadata optimization, structured schema, and crawler indexing"
+    }
+  },
+
+  "stats": {
+    "totalNodes": 32,
+    "totalWaves": 7,
+    "estimatedTime": "6-8 hours",
+    "parallelizableNodes": 24,
+    "criticalPath": ["1.1", "3.1", "3.4", "5.1"]
+  }
+}
