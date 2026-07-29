@@ -1,4 +1,4 @@
-import { BlogPost } from "@/types";
+import { BlogPost, Testimonial } from "@/types";
 
 export interface NavLink {
   label: string;
@@ -476,6 +476,81 @@ export const contactFormConfig: ContactForm = {
     { name: "Message", type: "textarea", required: true },
   ],
 };
+
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      "I had my gynecomastia surgery with Dr. K. Murali sir in Chennai, and I am very happy with the overall experience. Dr. Murali was professional, friendly, and explained the entire procedure clearly, which made me feel comfortable.",
+    author: "Mohammed Ali Saibudeen",
+    rating: 5,
+    procedure: "Gynecomastia",
+    verified: true,
+    date: "October 2025",
+  },
+  {
+    quote:
+      "Very impressive plastic surgeon. Professional, skilled, and delivered excellent results. Highly satisfied! Outstanding experience. The surgeon was knowledgeable, attentive.",
+    author: "G Muthu Ishwarya",
+    rating: 5,
+    procedure: "Breast Augmentation",
+    verified: true,
+    date: "September 2025",
+  },
+  {
+    quote:
+      "I had a great experience with Dr. Murali K. He is highly skilled, patient, and takes the time to explain procedures clearly, which made me feel comfortable and confident. The entire process—from consultation to treatment—was smooth.",
+    author: "Magesh kumar P",
+    rating: 5,
+    procedure: "Rhinoplasty",
+    verified: true,
+    date: "August 2025",
+  },
+  {
+    quote:
+      "Dr. Murali performed my liposuction and the results are absolutely amazing. He was very detailed in explaining the entire procedure and what to expect during recovery. The surgery was smooth and I felt very well taken care of throughout.",
+    author: "Madhumitha R",
+    rating: 5,
+    procedure: "Liposuction",
+    verified: true,
+    date: "July 2025",
+  },
+  {
+    quote:
+      "Dr. Murali K seems to have a good reputation among many patients and students for being calm, skilled, and patient-friendly. People often mention that he explains procedures clearly and gives realistic expectations before surgery.",
+    author: "Praveena Sundar",
+    rating: 5,
+    procedure: "Consultation",
+    verified: false,
+    date: "June 2025",
+  },
+  {
+    quote:
+      "I had a very good experience with Dr. Murali Plastic Surgery Clinic. The doctor is highly professional, knowledgeable, and made me feel comfortable throughout the entire process. The staff were also very friendly and supportive.",
+    author: "Aditi",
+    rating: 5,
+    procedure: "Hair Transplant",
+    verified: true,
+    date: "May 2025",
+  },
+  {
+    quote:
+      "I recently underwent a lipoma removal surgery and had a very smooth experience. The doctor was professional, attentive, and made me feel comfortable throughout the process. The procedure was quick, and the recovery has been going well.",
+    author: "Aki",
+    rating: 5,
+    procedure: "Scar Revision",
+    verified: true,
+    date: "April 2025",
+  },
+  {
+    quote:
+      "I'm truly grateful to Dr. Murali for his exceptional skill and compassionate care. The procedure went smoothly, and his clear guidance and support made my recovery much easier. He combines technical brilliance with genuine warmth.",
+    author: "Sai Mahesh",
+    rating: 5,
+    procedure: "Gynecomastia",
+    verified: true,
+    date: "March 2025",
+  },
+];
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);

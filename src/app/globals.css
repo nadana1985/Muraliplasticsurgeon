@@ -92,6 +92,18 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Trust Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[marquee_20s_linear_infinite\] {
+    animation: none !important;
+  }
+}
+
 /* Print styles */
 @media print {
   nav, footer {

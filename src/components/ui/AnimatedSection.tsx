@@ -1,12 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useInView } from "@/hooks/useInView";
-
-const prefersReducedMotion =
-  typeof window !== "undefined"
-    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    : false;
+import { motion, useReducedMotion } from "framer-motion";
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -21,38 +16,42 @@ export default function AnimatedSection({
   animation = "slide-up",
   delay = 0,
 }: AnimatedSectionProps) {
-  const { ref, isInView } = useInView({ threshold: 0.1 });
+  const prefersReducedMotion = useReducedMotion();
 
-  const animationClasses = {
-    "fade-in": "opacity-0",
-    "slide-up": "opacity-0 translate-y-8",
-    "slide-in-left": "opacity-0 -translate-x-8",
-    "slide-in-right": "opacity-0 translate-x-8",
+  const variants = {
+    hidden: {
+      opacity: 0,
+      y: animation === "slide-up" ? 30 : 0,
+      x: animation === "slide-in-left" ? -30 : animation === "slide-in-right" ? 30 : 0,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      transition: {
+        type: "spring" as const,
+        damping: 25,
+        stiffness: 120,
+        delay: delay / 1000, // convert ms to seconds
+      },
+    },
   };
 
-  const visibleClasses = {
-    "fade-in": "opacity-100",
-    "slide-up": "opacity-100 translate-y-0",
-    "slide-in-left": "opacity-100 translate-x-0",
-    "slide-in-right": "opacity-100 translate-x-0",
-  };
-
-  // Skip animation if user prefers reduced motion
   const shouldAnimate = !prefersReducedMotion;
 
+  if (!shouldAnimate) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
-    <div
-      ref={ref}
-      className={`${
-        shouldAnimate
-          ? `transition-all duration-700 ease-out ${
-              isInView ? visibleClasses[animation] : animationClasses[animation]
-            }`
-          : ""
-      } ${className}`}
-      style={shouldAnimate ? { transitionDelay: `${delay}ms` } : undefined}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={variants}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

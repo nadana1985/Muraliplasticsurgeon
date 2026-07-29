@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { MapPin, Phone } from "lucide-react";
 import { 
   featuredServiceLinks, 
   quickLinks, 
@@ -38,7 +39,7 @@ export default function Footer() {
             
             <div className="mt-6 space-y-3">
               <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-                <span className="text-primary-400">📍</span>
+                <MapPin className="h-4 w-4 text-primary-400" />
                 Healwell Clinic
               </h4>
               <address className="text-sm text-gray-400 not-italic leading-relaxed">
@@ -50,7 +51,7 @@ export default function Footer() {
                 href={clinicPhoneHref}
                 className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors duration-200"
               >
-                <span className="text-lg">📞</span>
+                <Phone className="h-4 w-4" />
                 {clinicPhone}
               </a>
             </div>

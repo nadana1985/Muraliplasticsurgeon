@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface LightboxImage {
   src: string;
@@ -91,9 +92,7 @@ export default function Lightbox({
         className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
         aria-label="Close lightbox"
       >
-        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <X className="h-6 w-6" />
       </button>
 
       {/* Previous button */}
@@ -103,9 +102,7 @@ export default function Lightbox({
           className="absolute left-4 z-10 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
           aria-label="Previous image"
         >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+          <ChevronLeft className="h-6 w-6" />
         </button>
       )}
 
@@ -116,9 +113,7 @@ export default function Lightbox({
           className="absolute right-4 z-10 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
           aria-label="Next image"
         >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          <ChevronRight className="h-6 w-6" />
         </button>
       )}
 
@@ -144,5 +139,3 @@ export default function Lightbox({
     </div>
   );
 }
-
-

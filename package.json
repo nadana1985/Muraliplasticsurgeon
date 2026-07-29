@@ -8,25 +8,39 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "jest",
     "clean": "node clean.js",
     "clean-dev": "npm run clean && npm run dev"
   },
   "dependencies": {
-    "next": "^14.2.0",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
+    "@hookform/resolvers": "^5.5.7",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.3.0"
+    "date-fns": "^4.4.0",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.43.0",
+    "lucide-react": "^1.27.0",
+    "next": "^14.2.0",
+    "photoswipe": "^5.4.4",
+    "react": "^18.3.0",
+    "react-compare-image": "^3.5.19",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "^18.3.0",
+    "react-hook-form": "^7.83.0",
+    "tailwind-merge": "^2.3.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.4.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.0"
+    "eslint-config-next": "^14.2.0",
+    "jest": "^30.4.2",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "ts-jest": "^29.4.12",
+    "typescript": "^5.4.0"
   }
 }

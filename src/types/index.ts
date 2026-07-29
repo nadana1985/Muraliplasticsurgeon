@@ -109,6 +109,10 @@ export interface Testimonial {
   author: string;
   quote: string;
   rating: number;
+  procedure?: string;
+  verified?: boolean;
+  date?: string;
+  avatar?: string;
 }
 
 export interface BlogPost {

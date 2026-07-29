@@ -29,6 +29,7 @@ export const colors = {
   },
   white: '#ffffff',
   black: '#000000',
+  gold: '#D4AF37',
   success: '#10b981',
   warning: '#f59e0b',
   error: '#ef4444',
@@ -98,6 +99,7 @@ export const shadows = {
   lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
   xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
   '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+  glow: '0 0 40px rgba(62, 113, 178, 0.15)',
   inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
   none: '0 0 #0000',
 } as const;

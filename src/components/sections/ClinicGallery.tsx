@@ -1,160 +1,198 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
+import ReactCompareImage from "react-compare-image";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/style.css";
+import { ChevronsUpDown, ZoomIn, Image as ImageIcon, Film, Eye } from "lucide-react";
 import { clinicImages } from "@/data/content";
 
+/* ─── Before/After pairs ─── */
+// TODO: Replace with actual patient procedure before/after photos
+const beforeAfterPairs = [
+  {
+    before: "/images/clinic/reception.jpg",
+    after: "/images/clinic/consulting-room.jpg",
+    label: "Clinic Interior — Before & After Renovation",
+  },
+  {
+    before: "/images/clinic/outdoor.jpg",
+    after: "/images/clinic/reception.jpg",
+    label: "Entrance → Reception Area",
+  },
+];
+
+/* ─── Categories ─── */
+const CATEGORIES = ["All", "Reception", "Rooms", "Equipment", "Before/After"];
+
+const categoryMap: Record<string, string> = {
+  "/images/clinic/reception.jpg": "Reception",
+  "/images/clinic/consulting-room.jpg": "Rooms",
+  "/images/clinic/outdoor.jpg": "Equipment",
+};
+
 export default function ClinicGallery() {
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState("All");
+  const galleryRef = useRef<HTMLDivElement>(null);
 
-  const openLightbox = (index: number) => setLightboxIndex(index);
-  const closeLightbox = () => setLightboxIndex(null);
+  const filtered = useMemo(
+    () =>
+      activeCategory === "All"
+        ? clinicImages
+        : clinicImages.filter((img) => categoryMap[img.src] === activeCategory),
+    [activeCategory]
+  );
 
-  const goNext = useCallback(() => {
-    setLightboxIndex((prev) => {
-      if (prev === null) return prev;
-      return (prev + 1) % clinicImages.length;
-    });
-  }, []);
-
-  const goPrev = useCallback(() => {
-    setLightboxIndex((prev) => {
-      if (prev === null) return prev;
-      return (prev - 1 + clinicImages.length) % clinicImages.length;
-    });
-  }, []);
-
-  // Keyboard navigation for lightbox
+  /* ─── PhotoSwipe init ─── */
   useEffect(() => {
-    if (lightboxIndex === null) return;
+    if (!galleryRef.current) return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case "Escape":
-          closeLightbox();
-          break;
-        case "ArrowRight":
-          e.preventDefault();
-          goNext();
-          break;
-        case "ArrowLeft":
-          e.preventDefault();
-          goPrev();
-          break;
-      }
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: galleryRef.current,
+      children: "a[data-pswp]",
+      pswpModule: () => import("photoswipe"),
+    });
+
+    // PhotoSwipe handles image counter UI automatically
+
+    lightbox.init();
+
+    return () => {
+      lightbox.destroy();
     };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [lightboxIndex, goNext, goPrev]);
+  }, [filtered.length]);
 
   return (
     <section className="section-padding bg-white">
       <div className="container-custom mx-auto">
+        {/* Header */}
         <div className="text-center">
-          <p className="text-sm font-medium uppercase tracking-widest text-primary-500">
-            Our Facility
-          </p>
+          <p className="text-sm font-medium uppercase tracking-widest text-primary-500">Our Facility</p>
           <h2 className="mt-2 font-display text-3xl font-bold text-gray-900 sm:text-4xl">
             Healwell Clinic Gallery
           </h2>
-          <p className="mt-3 text-gray-500">
-            A modern, clean, and comfortable environment for your care
-          </p>
+          <p className="mt-3 text-gray-500">A modern, clean, and comfortable environment for your care</p>
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {clinicImages.map((image, index) => (
+        {/* Category Filter Chips */}
+        <div className="mt-8 flex flex-wrap justify-center gap-2" role="group" aria-label="Filter gallery by category">
+          {CATEGORIES.map((cat) => (
             <button
-              key={image.src}
-              onClick={() => openLightbox(index)}
-              className="group relative overflow-hidden rounded-2xl shadow-sm transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              aria-pressed={activeCategory === cat}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                activeCategory === cat
+                  ? "bg-primary-500 text-white shadow-md shadow-primary-500/25"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
+              }`}
             >
-              <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <p className="font-display text-lg font-semibold">{image.alt}</p>
-                <p className="mt-1 text-sm text-gray-200">Click to enlarge</p>
-              </div>
+              {cat}
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90"
-          onClick={closeLightbox}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Image lightbox"
-        >
-          {/* Close button */}
-          <button
-            onClick={closeLightbox}
-            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Close lightbox"
-            autoFocus
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        {/* ─── Before/After Section ─── */}
+        <div className="mt-12">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gray-200" />
+            <h3 className="font-display text-xl font-semibold text-gray-900">Before & After</h3>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-gray-200" />
+          </div>
 
-          {/* Previous button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); goPrev(); }}
-            className="absolute left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Previous image"
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          {/* Next button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); goNext(); }}
-            className="absolute right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Next image"
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          {/* Image */}
-          <div
-            className="relative max-h-[85vh] max-w-[90vw]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={clinicImages[lightboxIndex].src}
-              alt={clinicImages[lightboxIndex].alt}
-              width={clinicImages[lightboxIndex].width}
-              height={clinicImages[lightboxIndex].height}
-              className="max-h-[85vh] rounded-lg object-contain"
-            />
-            <div className="absolute bottom-0 left-0 right-0 rounded-b-lg bg-gradient-to-t from-black/70 to-transparent p-4">
-              <p className="text-center text-lg font-semibold text-white">
-                {clinicImages[lightboxIndex].alt}
-              </p>
-              <p className="text-center text-sm text-gray-300">
-                {lightboxIndex + 1} / {clinicImages.length}
-              </p>
-            </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {beforeAfterPairs.map((pair, i) => (
+              <div key={i} className="group rounded-2xl border border-gray-100 bg-gray-50 p-3 shadow-sm transition-all duration-300 hover:shadow-md">
+                <div className="overflow-hidden rounded-xl">
+                  <ReactCompareImage
+                    leftImage={pair.before}
+                    rightImage={pair.after}
+                    sliderPositionPercentage={0.5}
+                    skeleton={
+                      <div className="flex h-[250px] items-center justify-center bg-gray-100">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+                      </div>
+                    }
+                    handle={
+                      <div className="flex h-full w-1 items-center justify-center bg-white shadow-lg">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg">
+                          <ChevronsUpDown className="h-5 w-5" />
+                        </div>
+                      </div>
+                    }
+                  />
+                </div>
+                <div className="mt-3 flex items-center justify-between px-2">
+                  <p className="text-sm font-medium text-gray-700">{pair.label}</p>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-primary-500">Drag to compare</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      )}
+
+        {/* ─── Masonry Gallery Grid (PhotoSwipe) ─── */}
+        <div className="mt-12">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gray-200" />
+            <h3 className="font-display text-xl font-semibold text-gray-900">Clinic Tour</h3>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-gray-200" />
+          </div>
+
+          <div
+            ref={galleryRef}
+            id="clinic-gallery"
+            className="grid grid-cols-2 gap-4 md:grid-cols-3 auto-rows-[200px]"
+          >
+            {filtered.map((image, index) => (
+              <a
+                key={image.src}
+                href={image.src}
+                data-pswp-width={image.width}
+                data-pswp-height={image.height}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative overflow-hidden rounded-2xl shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 row-span-1"
+              >
+                <div className="h-full overflow-hidden bg-gray-100 relative">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 translate-y-2 transition-all duration-400 group-hover:opacity-100 group-hover:translate-y-0">
+                  <p className="font-display text-lg font-semibold">{image.alt}</p>
+                  <p className="mt-1 text-sm text-gray-200 flex items-center gap-1">
+                    <ZoomIn className="h-3.5 w-3.5" />
+                    Click to enlarge
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-10 flex items-center justify-center gap-6 text-sm text-gray-500">
+          <span className="flex items-center gap-1.5">
+            <ImageIcon className="h-4 w-4 text-primary-400" />
+            {clinicImages.length} Photos
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Film className="h-4 w-4 text-primary-400" />
+            {beforeAfterPairs.length} Comparisons
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Eye className="h-4 w-4 text-primary-400" />
+            Pinch-to-Zoom
+          </span>
+        </div>
+      </div>
     </section>
   );
 }
